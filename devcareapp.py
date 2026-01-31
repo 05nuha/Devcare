@@ -1,13 +1,14 @@
 """
-DevCare Main Application
-Integrates all components and provides HTTP API for plugin
+DevCare Web Application
+Flask server that serves HTML frontend and provides API
 """
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 import threading
 import time
 import sys
+import os
 
 # Try to import other modules
 print("=" * 60)
@@ -17,7 +18,6 @@ print("=" * 60)
 # Import Person 2's code
 try:
     from posture_detector import PostureDetector
-
     HAS_POSTURE = True
     print("✅ Posture Detection: LOADED")
 except ImportError as e:
@@ -27,7 +27,6 @@ except ImportError as e:
 # Import Person 3's code
 try:
     from typing_analyzer import TypingAnalyzer
-
     HAS_TYPING = True
     print("✅ Typing Analyzer: LOADED")
 except ImportError as e:
@@ -36,7 +35,6 @@ except ImportError as e:
 
 try:
     from break_manager import BreakManager
-
     HAS_BREAKS = True
     print("✅ Break Manager: LOADED")
 except ImportError as e:
@@ -46,10 +44,12 @@ except ImportError as e:
 print("=" * 60)
 
 # Initialize Flask
-app = Flask(__name__)
-CORS(app)  # Allow IntelliJ plugin to access
+app = Flask(__name__,
+            static_folder='static',
+            template_folder='templates')
+CORS(app)
 
-# Global state dictionary (shared across all threads)
+# Global state dictionary
 state = {
     'posture': 0,
     'time': '0 min',
@@ -64,7 +64,6 @@ state = {
 posture_detector = None
 typing_analyzer = None
 break_manager = None
-
 
 def initialize_components():
     """Initialize all monitoring components"""
@@ -86,7 +85,6 @@ def initialize_components():
         print("Initializing Break Manager...")
         break_manager = BreakManager()
         print("✅ Break manager ready")
-
 
 def update_state_loop():
     """Background thread that updates state from all components"""
@@ -119,25 +117,34 @@ def update_state_loop():
         except Exception as e:
             print(f"Error updating state: {e}")
 
-        time.sleep(1)  # Update every second
-
+        time.sleep(1)
 
 # ============================================
-# HTTP API ENDPOINTS (For IntelliJ Plugin)
+# WEB ROUTES (Serve HTML pages)
 # ============================================
 
-@app.route('/status', methods=['GET'])
+@app.route('/')
+def index():
+    """Serve the main web app"""
+    return render_template('index.html')
+
+@app.route('/static/<path:path>')
+def serve_static(path):
+    """Serve static files (CSS, JS)"""
+    return send_from_directory('static', path)
+
+# ============================================
+# HTTP API ENDPOINTS
+# ============================================
+
+@app.route('/api/status', methods=['GET'])
 def get_status():
-    """
-    Main endpoint - Plugin calls this every second
-    Returns current state of all monitoring
-    """
+    """API endpoint for getting current status"""
     return jsonify(state)
 
-
-@app.route('/health', methods=['GET'])
+@app.route('/api/health', methods=['GET'])
 def health_check():
-    """Check if server is running"""
+    """Health check endpoint"""
     return jsonify({
         'status': 'ok',
         'components': {
@@ -147,38 +154,20 @@ def health_check():
         }
     })
 
-
-@app.route('/break', methods=['POST'])
+@app.route('/api/break', methods=['POST'])
 def record_break():
-    """
-    Plugin can notify when user takes a break
-    """
+    """Record a break taken"""
     if HAS_BREAKS and break_manager:
         break_manager.take_break()
         return jsonify({'success': True, 'message': 'Break recorded'})
     return jsonify({'success': False, 'message': 'Break manager not available'})
 
-
-@app.route('/reset', methods=['POST'])
+@app.route('/api/reset', methods=['POST'])
 def reset_stats():
     """Reset all statistics"""
     if HAS_BREAKS and break_manager:
         break_manager.reset()
     return jsonify({'success': True, 'message': 'Stats reset'})
-
-
-@app.route('/history', methods=['GET'])
-def get_history():
-    """
-    Get historical data (for future graphs)
-    """
-    # TODO: Implement history tracking
-    return jsonify({
-        'posture_history': [],
-        'typing_history': [],
-        'message': 'History tracking coming soon'
-    })
-
 
 # ============================================
 # STARTUP
@@ -194,20 +183,25 @@ def print_startup_banner():
     print(" |____/ \\___| \\_/  \\____\\__,_|_|  \\___| ")
     print("                                        ")
     print("=" * 60)
-    print("\n🚀 Starting DevCare Service...")
+    print("\n🚀 Starting DevCare Web Application...")
     print("\n📊 Component Status:")
     print(f"   Posture Detection: {'✅ ACTIVE' if HAS_POSTURE else '❌ MISSING'}")
     print(f"   Typing Analysis:   {'✅ ACTIVE' if HAS_TYPING else '❌ MISSING'}")
     print(f"   Break Management:  {'✅ ACTIVE' if HAS_BREAKS else '❌ MISSING'}")
-    print("\n🌐 HTTP Server: http://localhost:5000")
-    print("🔌 Plugin can now connect!")
+    print("\n🌐 Web App: http://localhost:5000")
+    print("📡 API: http://localhost:5000/api/status")
     print("\n" + "=" * 60)
+    print("Open your browser and go to: http://localhost:5000")
     print("Press Ctrl+C to stop\n")
-
 
 if __name__ == '__main__':
     # Print banner
     print_startup_banner()
+
+    # Create templates and static directories if they don't exist
+    os.makedirs('templates', exist_ok=True)
+    os.makedirs('static/css', exist_ok=True)
+    os.makedirs('static/js', exist_ok=True)
 
     # Initialize all components
     initialize_components()
@@ -221,10 +215,10 @@ if __name__ == '__main__':
     # Start Flask server
     try:
         app.run(
-            host='0.0.0.0',  # Allow external connections
+            host='0.0.0.0',
             port=5000,
-            debug=False,  # Set to True for development
-            use_reloader=False  # Prevent double initialization
+            debug=False,
+            use_reloader=False
         )
     except KeyboardInterrupt:
         print("\n\n👋 Shutting down DevCare...")

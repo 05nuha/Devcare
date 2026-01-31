@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCare - Posture Monitor</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🪑 DevCare</h1>
+            <p class="subtitle">Your Posture & Productivity Monitor</p>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span id="connectionStatus">Connecting...</span>
+            </div>
+        </header>
+
+        <!-- Main Posture Display -->
+        <div class="posture-card">
+            <h2>Current Posture</h2>
+            <div class="posture-score" id="postureScore">--</div>
+            <div class="posture-bar-container">
+                <div class="posture-bar" id="postureBar"></div>
+            </div>
+            <div class="posture-status" id="postureStatus">Initializing...</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <!-- Coding Time -->
+            <div class="stat-card">
+                <div class="stat-icon">⏱</div>
+                <div class="stat-label">Coding Time</div>
+                <div class="stat-value" id="codingTime">-- min</div>
+            </div>
+
+            <!-- Stress Level -->
+            <div class="stat-card">
+                <div class="stat-icon">😤</div>
+                <div class="stat-label">Stress Level</div>
+                <div class="stat-value" id="stressLevel">--</div>
+            </div>
+
+            <!-- Breaks Taken -->
+            <div class="stat-card">
+                <div class="stat-icon"></div>
+                <div class="stat-label">Breaks Taken</div>
+                <div class="stat-value" id="breaksTaken">0</div>
+            </div>
+
+            <!-- Typing Speed -->
+            <div class="stat-card">
+                <div class="stat-icon">⌨</div>
+                <div class="stat-label">Typing Speed</div>
+                <div class="stat-value" id="typingSpeed">-- keys/min</div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="takeBreakBtn">Take a Break</button>
+            <button class="btn btn-secondary" id="resetStatsBtn">Reset Stats</button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Last updated: <span id="lastUpdate">--</span></p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
