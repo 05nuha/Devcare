@@ -1,15 +1,20 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.05nuha.devcare</id>
-    <name>Devcare</name>
-    <vendor>05nuha</vendor>
+    <id>com.devcare.plugin</id>
+    <name>DevCare</name>
+    <vendor email="support@devcare.com" url="https://github.com/yourteam">Your Team</vendor>
+
+    <description><![CDATA[
+    DevCare - Real-time health monitoring for developers.
+    Tracks posture, typing patterns, and break reminders.
+    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.05nuha.devcare.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.05nuha.devcare.startup.MyProjectActivity" />
+        <toolWindow
+                id="DevCare"
+                anchor="right"
+                factoryClass="com.github.nuha.devcare.toolWindow.DevCareToolWindowFactory"
+                icon="/icons/devcare.svg"/>
     </extensions>
 </idea-plugin>

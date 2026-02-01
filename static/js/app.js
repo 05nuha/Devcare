@@ -2,6 +2,7 @@
 class DevCareApp {
     constructor() {
         this.updateInterval = 1000; // Update every second
+        this.backendUrl = "http://127.0.0.1:5000"; // Central backend URL
         this.init();
     }
 
@@ -24,10 +25,7 @@ class DevCareApp {
             resetStatsBtn: document.getElementById('resetStatsBtn')
         };
 
-        // Setup event listeners
         this.setupEventListeners();
-
-        // Start polling
         this.startPolling();
     }
 
@@ -38,7 +36,7 @@ class DevCareApp {
 
     async fetchStatus() {
         try {
-            const response = await fetch('/api/status');
+            const response = await fetch(`${this.backendUrl}/api/status`);
 
             if (!response.ok) {
                 throw new Error('Server error');
@@ -55,35 +53,35 @@ class DevCareApp {
     }
 
     updateUI(data) {
-        // Update posture score
-        const posture = data.posture || 0;
-        this.elements.postureScore.textContent = `${posture}/100`;
+        // ---- POSTURE ----
+        const postureScore = data.posture?.score ?? 0;
 
-        // Update progress bar
-        this.elements.postureBar.style.width = `${posture}%`;
+        this.elements.postureScore.textContent = `${postureScore}/100`;
+        this.elements.postureBar.style.width = `${postureScore}%`;
 
-        // Set color based on score
         this.elements.postureBar.className = 'posture-bar';
-        if (posture >= 80) {
+
+        if (postureScore >= 80) {
             this.elements.postureBar.classList.add('excellent');
-            this.elements.postureStatus.textContent = 'Excellent Posture!';
-        } else if (posture >= 60) {
+            this.elements.postureStatus.textContent = data.posture.status || 'Excellent posture';
+        } else if (postureScore >= 60) {
             this.elements.postureBar.classList.add('good');
-            this.elements.postureStatus.textContent = 'Good Posture';
-        } else if (posture > 0) {
+            this.elements.postureStatus.textContent = data.posture.status || 'Good posture';
+        } else if (postureScore > 0) {
             this.elements.postureBar.classList.add('poor');
-            this.elements.postureStatus.textContent = '⚠Poor Posture - Sit up straight!';
+            this.elements.postureStatus.textContent =
+                data.posture.status || '⚠ Poor posture — sit up straight!';
         } else {
             this.elements.postureStatus.textContent = 'Calibrating...';
         }
 
-        // Update other stats
-        this.elements.codingTime.textContent = data.time || '0 min';
+        // ---- OTHER STATS ----
+        this.elements.codingTime.textContent = data.breaks?.time || '0 min';
         this.elements.stressLevel.textContent = data.stress || 'Low';
-        this.elements.breaksTaken.textContent = data.breaks_taken || 0;
-        this.elements.typingSpeed.textContent = `${data.typing_speed || 0} keys/min`;
+        this.elements.breaksTaken.textContent = data.breaks?.taken ?? 0;
+        this.elements.typingSpeed.textContent = `${data.typing?.speed ?? 0} keys/min`;
 
-        // Update last update time
+        // ---- LAST UPDATE ----
         const now = new Date();
         this.elements.lastUpdate.textContent = now.toLocaleTimeString();
     }
@@ -102,14 +100,12 @@ class DevCareApp {
 
     async takeBreak() {
         try {
-            const response = await fetch('/api/break', {
+            const response = await fetch(`${this.backendUrl}/api/break`, {
                 method: 'POST'
             });
-
             const result = await response.json();
 
             if (result.success) {
-                console.log('Break recorded!');
                 this.showNotification('Break recorded!');
                 this.fetchStatus();
             }
@@ -119,19 +115,15 @@ class DevCareApp {
     }
 
     async resetStats() {
-        if (!confirm('Reset all statistics?')) {
-            return;
-        }
+        if (!confirm('Reset all statistics?')) return;
 
         try {
-            const response = await fetch('/api/reset', {
+            const response = await fetch(`${this.backendUrl}/api/reset`, {
                 method: 'POST'
             });
-
             const result = await response.json();
 
             if (result.success) {
-                console.log('Stats reset!');
                 this.showNotification('Stats reset!');
                 this.fetchStatus();
             }
@@ -158,51 +150,16 @@ class DevCareApp {
 
         document.body.appendChild(notification);
 
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
+        setTimeout(() => notification.remove(), 3000);
     }
 
     startPolling() {
-        // Initial fetch
         this.fetchStatus();
-
-        // Poll every second
-        setInterval(() => {
-            this.fetchStatus();
-        }, this.updateInterval);
-
+        setInterval(() => this.fetchStatus(), this.updateInterval);
         console.log('Polling started');
     }
 }
 
-// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.devCareApp = new DevCareApp();
 });
-```
-
----
-
-## **NOW REFRESH YOUR BROWSER!**
-```
-http://localhost:5000
-```
-
-**You should see the beautiful web app!**
-
----
-
-## **VERIFY YOUR FILE STRUCTURE:**
-```
-python-app/
-├── devcare_app.py          ✅ (running)
-│
-├── templates/
-│   └── index.html          ✅ (just created)
-│
-└── static/
-    ├── css/
-    │   └── style.css       ✅ (just created)
-    └── js/
-        └── app.js          ✅ (just created)
