@@ -140,7 +140,34 @@ def serve_static(path):
 @app.route('/api/status', methods=['GET'])
 def get_status():
     """API endpoint for getting current status"""
-    return jsonify(state)
+
+    posture_score = state.get('posture', 0)
+    typing_speed = state.get('typing_speed', 0)
+    breaks_taken = state.get('breaks_taken', 0)
+    should_break = state.get('should_break', False)
+    session_time = state.get('time', '0 min')
+    stress_level = state.get('stress', 'Low')
+    overall_status = state.get('status', 'Starting...')
+
+    response = {
+        "status": overall_status,
+        "posture": {
+            "score": posture_score,
+            "status": "Good posture" if posture_score >= 70 else "Needs improvement",
+            "color": "green" if posture_score >= 70 else "orange"
+        },
+        "typing": {
+            "speed": typing_speed
+        },
+        "breaks": {
+            "taken": breaks_taken,
+            "should_break": should_break,
+            "time": session_time
+        },
+        "stress": stress_level
+    }
+
+    return jsonify(response)
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
