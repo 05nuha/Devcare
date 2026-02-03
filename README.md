@@ -1,52 +1,214 @@
-# Devcare
+# 🏆 DevCare - Developer Health Monitoring System
 
-![Build](https://github.com/05nuha/Devcare/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
+**Winner of 1st Place - JetBrains "Help the Developer" Bounty Challenge**  
+*Inter-University Hackathon, University of Birmingham Dubai | February 2026*
 
-## Template ToDo list
-- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
-- [ ] Get familiar with the [template documentation][template].
-- [ ] Adjust the [pluginGroup](./gradle.properties) and [pluginName](./gradle.properties), as well as the [id](./src/main/resources/META-INF/plugin.xml) and [sources package](./src/main/kotlin).
-- [ ] Adjust the plugin description in `README` (see [Tips][docs:plugin-description])
-- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html?from=IJPluginTemplate).
-- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
-- [ ] Set the `MARKETPLACE_ID` in the above README badges. You can obtain it once the plugin is published to JetBrains Marketplace.
-- [ ] Set the [Plugin Signing](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html?from=IJPluginTemplate) related [secrets](https://github.com/JetBrains/intellij-platform-plugin-template#environment-variables).
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html?from=IJPluginTemplate).
-- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
-- [ ] Configure the [CODECOV_TOKEN](https://docs.codecov.com/docs/quick-start) secret for automated test coverage reports on PRs
+> Real-time health monitoring for developers, integrated directly into IntelliJ IDEA.
 
-<!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+---
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+## 🎯 The Problem
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
-<!-- Plugin description end -->
+Developers spend 8+ hours daily at their desks, leading to:
+- Poor posture and chronic back pain
+- Repetitive strain injuries
+- Stress and burnout
+- Reduced productivity and focus
 
-## Installation
+Existing health solutions require context-switching away from the IDE. **DevCare brings health monitoring to where developers actually work.**
 
-- Using the IDE built-in plugin system:
+---
 
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Devcare"</kbd> >
-  <kbd>Install</kbd>
+## 💡 Our Solution
 
-- Using JetBrains Marketplace:
+DevCare is an IntelliJ IDEA plugin that provides seamless health monitoring without disrupting your workflow:
 
-  Go to [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID) and install it by clicking the <kbd>Install to ...</kbd> button in case your IDE is running.
+- **🪑 Real-Time Posture Monitoring** - Computer vision-based tracking using MediaPipe
+- **⌨️ Stress Detection** - Analyzes typing patterns to identify stress levels
+- **☕ Smart Break Reminders** - Intelligent suggestions based on your work patterns
+- **🎮 Gamification** - XP, levels, and achievements to build healthy habits
+- **📊 Daily Analytics** - Track your health progress over time
 
-  You can also download the [latest release](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID/versions) from JetBrains Marketplace and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+All integrated directly inside your IDE - no context switching required.
 
-- Manually:
+---
 
-  Download the [latest release](https://github.com/05nuha/Devcare/releases/latest) and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+## 🚀 Features
+
+### Core Features
+- Distance-invariant posture detection (works at any camera distance)
+- Personal calibration for individual body types
+- Real-time posture scoring (0-100)
+- Typing velocity and stress level analysis
+- Customizable break intervals
+- Health statistics dashboard
+
+### Gamification System
+- XP and leveling system
+- Achievement badges
+- Posture streak tracking
+- Daily/weekly summaries
+
+### IDE Integration
+- Seamless IntelliJ IDEA plugin
+- Non-intrusive status bar widget
+- Real-time notifications
+- Works alongside your development workflow
+
+---
+
+## 🛠️ Tech Stack
+
+**Backend:**
+- Python 3.12
+- Flask
+- MediaPipe (Computer Vision)
+- OpenCV
+- NumPy
+
+**Frontend:**
+- HTML5
+- CSS3 (Modern glassmorphism design)
+- Vanilla JavaScript
+- Real-time API polling
+
+**Plugin:**
+- Kotlin
+- IntelliJ Platform SDK 2024.1
+- JBCefBrowser for web content embedding
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+```bash
+- Python 3.12+
+- IntelliJ IDEA 2024.1+
+- Webcam (for posture detection)
+```
+
+### Backend Setup
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/devcare.git
+cd devcare
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run the Flask backend
+python devcareapp.py
+```
+
+The backend will start on `http://localhost:5000`
+
+### Plugin Installation
+```bash
+# Build the plugin
+./gradlew build
+
+# Or install from IntelliJ:
+# 1. File → Settings → Plugins
+# 2. Click gear icon → Install Plugin from Disk
+# 3. Select the built .jar file from build/distributions/
+```
+
+---
+
+## 🎮 Usage
+
+1. **Start the Flask backend:**
+```bash
+   python devcareapp.py
+```
+
+2. **Open IntelliJ IDEA**
+
+3. **Access DevCare:**
+   - View → Tool Windows → DevCare
+   - Or click the DevCare icon in the status bar
+
+4. **Start coding!**
+   - Your posture is monitored in real-time
+   - Receive break reminders
+   - Track your health stats
+   - Earn achievements
+
+---
+
+## 📸 Screenshots
+
+### Main Dashboard
+*Real-time health monitoring with modern UI*
+
+### IntelliJ Integration
+*Seamless plugin integration in the IDE*
+
+### Posture Detection
+*Live posture scoring with visual feedback*
+
+---
+
+## 🏗️ Project Structure
+```
+devcare/
+├── backend/
+│   ├── devcareapp.py           # Flask server
+│   ├── posture_detector.py     # Posture detection module
+│   ├── typing_analyzer.py      # Typing analysis module
+│   ├── break_manager.py        # Break management
+│   └── requirements.txt        # Python dependencies
+│
+├── frontend/
+│   ├── templates/
+│   │   └── index.html         # Main UI
+│   └── static/
+│       ├── css/style.css      # Styling
+│       └── js/app.js          # Frontend logic
+│
+├── plugin/
+│   └── src/main/kotlin/...   # IntelliJ plugin code
+│
+└── README.md
+```
+
+---
+
+## 🎯 API Endpoints
+```
+GET  /api/status        # Get current health status
+POST /api/break         # Record a break
+POST /api/reset         # Reset statistics
+GET  /api/history       # Get posture history
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Whether it's:
+- 🐛 Bug fixes
+- ✨ New features
+- 📝 Documentation improvements
+- 🎨 UI enhancements
+
+Please feel free to open an issue or submit a pull request.
+
+---
+
+## 👥 Team
+
+Built with ❤️ by:
+- **Nuha Aburamadan** - Plugin Development & Integration
+- **Samira Alsaqqa** - Backend Development & Computer Vision
+- **Laila Elsayed** - Frontend Development & UI/UX
 
 
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
 
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
-[docs:plugin-description]: https://plugins.jetbrains.com/docs/intellij/plugin-user-experience.html#plugin-description-and-presentation
+
+
+---
+
+<p align="center">Made with 💻 and ☕ at the JetBrains Hackathon 2026</p>
