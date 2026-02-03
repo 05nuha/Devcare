@@ -1,4 +1,4 @@
-# 🏆 DevCare - Developer Health Monitoring System
+# DevCare - Developer Health Monitoring System
 
 **Winner of 1st Place - JetBrains "Help the Developer" Bounty Challenge**  
 *Inter-University Hackathon, University of Birmingham Dubai | February 2026*
@@ -6,20 +6,6 @@
 > Real-time health monitoring for developers, integrated directly into IntelliJ IDEA.
 
 ---
-
-## 🎯 The Problem
-
-Developers spend 8+ hours daily at their desks, leading to:
-- Poor posture and chronic back pain
-- Repetitive strain injuries
-- Stress and burnout
-- Reduced productivity and focus
-
-Existing health solutions require context-switching away from the IDE. **DevCare brings health monitoring to where developers actually work.**
-
----
-
-## 💡 Our Solution
 
 DevCare is an IntelliJ IDEA plugin that provides seamless health monitoring without disrupting your workflow:
 
